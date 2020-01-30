@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProtoVerify": {
+      "commandName": "Project",
+      "commandLineArgs": "-d E:\\Liquidnet\\depot\\src\\release\\Shared\\SourceGen\\proto"
+    }
+  }
+}

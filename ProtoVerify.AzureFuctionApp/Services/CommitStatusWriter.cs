@@ -1,0 +1,30 @@
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+
+using Octokit;
+
+namespace ProtoVerify.AzureFuctionApp.Services
+{
+    public class CommitStatusWriter : ICommitStatusWriter
+    {
+        private readonly GithubSettings _settings;
+
+        public CommitStatusWriter(IOptions<GithubSettings> options)
+        {
+            _settings = options.Value;
+        }
+
+        public async Task WriteCommitStatusAsync(PullRequestContext context, CommitState state, string description)
+        {
+            var client = new CommitStatusClient(new ApiConnection(context.GithubConnection));
+            var status = new NewCommitStatus
+            {
+                State = state,
+                Description = description,
+                Context = _settings.StatusContext
+            };
+            await client.Create(context.Payload.Repository.Id, context.Payload.PullRequest.Head.Sha, status);
+        }
+    }
+}
